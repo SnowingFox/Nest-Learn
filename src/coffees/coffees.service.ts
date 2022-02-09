@@ -8,6 +8,8 @@ import { FlavorsEntity } from './entities/flavors.entity'
 import { PaginationQueryDto } from './entities/pagination-query.dto'
 import { Event } from '../event/entities/event.entity'
 import { COFFEES_BRANDS } from './coffees.constant'
+import { ConfigType } from '@nestjs/config'
+import coffeesConfig from '../config/coffees.config'
 
 @Injectable()
 export class CoffeesService {
@@ -17,12 +19,13 @@ export class CoffeesService {
   @InjectRepository(FlavorsEntity)
   private readonly flavorsRepository: Repository<FlavorsEntity>
 
+  @Inject(coffeesConfig.KEY)
+  private readonly coffeesConfiguration: ConfigType<typeof coffeesConfig>
+
   constructor(
     @Inject(COFFEES_BRANDS)
     private readonly coffeesBrands: string[],
-  ) {
-    console.log(this.coffeesBrands)
-  }
+  ) {}
 
   private readonly connection: Connection
 
@@ -35,8 +38,12 @@ export class CoffeesService {
     })
   }
 
-  findOne(id: string) {
-    return this.coffeesRepository.findOne(id)
+  async findOne(id: string) {
+    const coffee = await this.coffeesRepository.findOne(id)
+    if (!coffee) {
+      throw new NotFoundException('Not found this coffee')
+    }
+    return coffee
   }
 
   async create(createCoffeeDto: CreateCoffeeDto) {

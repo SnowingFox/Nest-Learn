@@ -6,9 +6,14 @@ import CoffeesEntity from './entities/coffees.entity'
 import { FlavorsEntity } from './entities/flavors.entity'
 import { Event } from '../event/entities/event.entity'
 import { COFFEES_BRANDS } from './coffees.constant'
+import { ConfigModule } from '@nestjs/config'
+import coffeesConfig from '../config/coffees.config'
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CoffeesEntity, FlavorsEntity, Event])],
+  imports: [
+    TypeOrmModule.forFeature([CoffeesEntity, FlavorsEntity, Event]),
+    ConfigModule.forFeature(coffeesConfig),
+  ],
   controllers: [CoffeesController],
   providers: [CoffeesService, { provide: COFFEES_BRANDS, useValue: ['雀巢', '卡布奇诺'] }],
   exports: [CoffeesService],

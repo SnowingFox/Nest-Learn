@@ -7,13 +7,16 @@ import { CoffeeRatingService } from './coffee-rating/coffee-rating.service'
 import { CoffeeRatingModule } from './coffee-rating/coffee-rating.module'
 import { DatabaseModule } from './database/database.module'
 import databaseConfig from './config/database'
+import { ConfigModule } from '@nestjs/config'
+import coffeesConfig from './config/coffees.config'
 
 @Module({
   imports: [
-    CoffeesModule,
     TypeOrmModule.forRoot(databaseConfig),
+    CoffeesModule,
     CoffeeRatingModule,
     DatabaseModule,
+    ConfigModule.forFeature(coffeesConfig),
   ],
   controllers: [AppController],
   providers: [AppService, CoffeeRatingService],
