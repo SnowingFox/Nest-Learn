@@ -38,7 +38,7 @@ export class CoffeesService {
     })
   }
 
-  async findOne(id: string) {
+  async findOne(id: number) {
     const coffee = await this.coffeesRepository.findOne(id)
     if (!coffee) {
       throw new NotFoundException('Not found this coffee')
@@ -75,7 +75,7 @@ export class CoffeesService {
     return this.coffeesRepository.save(coffee)
   }
 
-  async remove(id: string) {
+  async remove(id: number) {
     const coffee = await this.findOne(id)
     return this.coffeesRepository.remove(coffee)
   }
