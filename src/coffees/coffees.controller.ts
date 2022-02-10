@@ -3,14 +3,17 @@ import { CoffeesService } from './coffees.service'
 import { CreateCoffeeDto } from './dto/create-coffee.dto'
 import { UpdateCoffeeDto } from './dto/update-coffee.dto'
 import { PaginationQueryDto } from './entities/pagination-query.dto'
+import { Public } from '../common/decorators/public.decorator'
 
 @Controller('coffees')
 export class CoffeesController {
   @Inject()
   private readonly coffeesService: CoffeesService
 
+  @Public()
   @Get()
-  findAll(@Query() paginationQuery: PaginationQueryDto) {
+  async findAll(@Query() paginationQuery: PaginationQueryDto) {
+    await new Promise((resolve) => setTimeout(resolve, 5000))
     return this.coffeesService.findAll(paginationQuery)
   }
 
